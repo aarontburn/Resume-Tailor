@@ -1,0 +1,18 @@
+.contentContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.inputFields {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+}
+
+.submit {
+    width: min-content;
+    border: 1px solid black;
+    margin-top: 1em;
+}
