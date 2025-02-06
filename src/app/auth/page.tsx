@@ -1,12 +1,10 @@
 "use client";
 
-import { AuthError, AuthErrorCodes } from "firebase/auth";
 import { log } from "../../common/log";
 import { signInUser, registerUser, FirebaseAuthResponse } from "../../controller/auth/FirebaseGateway";
 import "./style.css";
 import { FormEvent, useState } from "react";
 import { FirebaseError } from "firebase/app";
-import Router from "next/router";
 
 type ReactSetStateFunction<T = any> = (value: T | ((prevState: T) => T)) => void;
 
@@ -26,11 +24,16 @@ async function loginUser(email: string, password: string, setErrorMessage: React
     const result: FirebaseAuthResponse = await signInUser(email, password);
     if (result.type === "success") {
         log("Signed in successfully");
-        setErrorMessage("Signed in successfully.")
-        Router.push("/");
+        setErrorMessage("Signed in successfully.");
+        console.log(result.body)
+
+        // Programmatically redirect back to home screen
+        // if (!(typeof window === undefined)) { 
+        //     window.history.pushState(null, '', "/"); 
+        //     window.location.reload(); 
+        // }
 
 
-        // Redirect
     } else {
         setErrorMessage("Error: " + parseFirebaseError(result.body as FirebaseError));
     }

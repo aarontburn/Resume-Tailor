@@ -2,6 +2,7 @@ import { log } from "../../common/log";
 import { getAuth, createUserWithEmailAndPassword, Auth, UserCredential, signInWithEmailAndPassword, AuthError } from "firebase/auth";
 import { FirebaseError, FirebaseOptions, initializeApp } from 'firebase/app';
 
+// I think this is fine to leave here...
 const firebaseConfig: FirebaseOptions = {
     apiKey: "AIzaSyB1_lsrSS76rNrxnbLe0BGE4MdUWZj1P1Q",
     authDomain: "resume-tailor-72561.firebaseapp.com",
