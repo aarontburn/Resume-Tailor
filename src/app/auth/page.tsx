@@ -7,7 +7,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { FirebaseError } from "firebase/app";
 import { getCookie, setCookie } from "../../common/cookie";
 import { USER_ID } from "../../common/keys";
-import { useRouter } from "next/router";
 import { redirect } from "../../common/helper";
 
 type ReactSetStateFunction<T = any> = (value: T | ((prevState: T) => T)) => void;

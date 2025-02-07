@@ -14,11 +14,10 @@ export default function Header() {
     useEffect(() => {
         (async () => {
             const uid: string | undefined = await getCookie(USER_ID);
-            if (userID === undefined) {
+            if (uid === undefined) {
                 return;
             }
             setUserID(uid as string);
-            console.log(userID)
         })();
     }, [userID]);
 
