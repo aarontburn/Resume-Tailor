@@ -3,8 +3,12 @@
 import { log } from "../../common/log";
 import { signInUser, registerUser, FirebaseAuthResponse } from "../../controller/auth/FirebaseGateway";
 import "./style.css";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { FirebaseError } from "firebase/app";
+import { getCookie, setCookie } from "../../common/cookie";
+import { USER_ID } from "../../common/keys";
+import { useRouter } from "next/router";
+import { redirect } from "../../common/helper";
 
 type ReactSetStateFunction<T = any> = (value: T | ((prevState: T) => T)) => void;
 
@@ -25,13 +29,11 @@ async function loginUser(email: string, password: string, setErrorMessage: React
     if (result.type === "success") {
         log("Signed in successfully");
         setErrorMessage("Signed in successfully.");
-        console.log(result.body)
+
+        setCookie(USER_ID, result.body.user.uid);
 
         // Programmatically redirect back to home screen
-        // if (!(typeof window === undefined)) { 
-        //     window.history.pushState(null, '', "/"); 
-        //     window.location.reload(); 
-        // }
+        redirect("/");
 
 
     } else {
@@ -52,7 +54,8 @@ async function register(email: string, password1: string, password2: string, set
     const result: FirebaseAuthResponse = await registerUser(email, password1);
     if (result.type === "success") {
         log("Registered successfully");
-        // Redirect
+        // Redirect to home or profile maybe
+        redirect("/")
     } else {
         setErrorMessage("Error: " + parseFirebaseError(result.body as FirebaseError));
 
@@ -66,6 +69,17 @@ const onFieldChange = (setState: ReactSetStateFunction, property: string = "valu
 
 export default function AuthPage() {
     const [returningUser, setReturningUser] = useState(true);
+
+    useEffect(() => {
+        getCookie(USER_ID).then((response: string | undefined) => {
+            console.log(response)
+            if (response !== undefined) { // userid already stored, redirect to profile page
+                redirect("/profile")
+            }
+        })
+    }, []);
+
+
     return <div className="contentContainer">
         <label htmlFor="returningCheckbox">Returning</label>
         <input id="returningCheckbox"

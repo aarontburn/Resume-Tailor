@@ -13,11 +13,10 @@ const firebaseConfig: FirebaseOptions = {
     measurementId: "G-H2CV0CTK51"
 };
 
+export type FirebaseAuthResponse = 
+    { type: "success", body: UserCredential } |
+    { type: "failure", body: FirebaseError | string }
 
-export interface FirebaseAuthResponse {
-    type: "success" | "failure",
-    body: UserCredential | (FirebaseError | string);
-}
 
 
 let auth: Auth | undefined = undefined;
@@ -31,7 +30,7 @@ export function init() {
 }
 
 
-export function registerUser(email: string, password: string): Promise<FirebaseAuthResponse> {
+export async function registerUser(email: string, password: string): Promise<FirebaseAuthResponse> {
     if (auth === undefined) {
         init();
     }
@@ -50,7 +49,7 @@ export function registerUser(email: string, password: string): Promise<FirebaseA
     });
 }
 
-export function signInUser(email: string, password: string): Promise<FirebaseAuthResponse> {
+export async function signInUser(email: string, password: string): Promise<FirebaseAuthResponse> {
     if (auth === undefined) {
         init();
     }
