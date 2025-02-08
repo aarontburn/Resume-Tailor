@@ -42,11 +42,11 @@ async function loginUser(email: string, password: string, setErrorMessage: React
 
 async function register(email: string, password1: string, password2: string, setErrorMessage: ReactSetStateFunction<string>) {
     if (password1 !== password2) {
-        setErrorMessage("Error: Passwords do not match.")
+        setErrorMessage("Error: Passwords do not match.");
         return;
     }
     if (password1.length <= 6) {
-        setErrorMessage("Error: Password must be longer than 6 characters.")
+        setErrorMessage("Error: Password must be longer than 6 characters.");
         return;
     }
 
@@ -73,7 +73,7 @@ export default function AuthPage() {
         getCookie(USER_ID).then((response: string | undefined) => {
             console.log(response)
             if (response !== undefined) { // userid already stored, redirect to profile page
-                redirect("/profile")
+                redirect("/profile");
             }
         })
     }, []);

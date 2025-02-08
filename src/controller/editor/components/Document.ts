@@ -1,3 +1,4 @@
+import { UUID } from "../../types/DocTypes";
 import { DocComponent } from "./DocComponent";
 
 export interface DocumentMetadata {
@@ -6,7 +7,9 @@ export interface DocumentMetadata {
 }
 
 export interface Document {
-    id: string;
-
+    userID: UUID,
+    displayName: string,
+    documentID: UUID,
+    type: "latex" | "html",
     components: DocComponent[];
 }

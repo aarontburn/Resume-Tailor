@@ -1,0 +1,11 @@
+.container {
+    margin: 1em;
+}
+
+.new-doc-button {
+    font-size: 1.25em;
+    border: 1px solid black;
+    width: fit-content;
+    border-radius: 5px; 
+    padding: 0.25em 0.5em;
+}

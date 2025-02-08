@@ -1,0 +1,20 @@
+user {
+    user_id: string (uuid),
+    email: string,
+    documents: document[]
+}
+
+
+document {
+    user_id: string,
+    document_display_name: string,
+    document_id: string (uuid),
+    type: "latex" | "html",
+    components: component[]
+}
+
+component {
+    component_id: string (uuid),
+    component_display_name: string
+    body: string
+}
