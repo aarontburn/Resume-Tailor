@@ -1,4 +1,4 @@
-import { Document } from "../editor/components/Document";
+import { Document } from "../editor/Document";
 
 
 

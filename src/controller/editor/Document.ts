@@ -1,5 +1,4 @@
-import { UUID } from "../../types/DocTypes";
-import { DocComponent } from "./DocComponent";
+import { UUID } from "../types/DocTypes";
 
 export interface DocumentMetadata {
     last_edited: string // date
@@ -12,4 +11,11 @@ export interface Document {
     documentID: UUID,
     type: "latex" | "html",
     components: DocComponent[];
+}
+
+
+export interface DocComponent {
+    componentID: UUID,
+    displayName: string, 
+    body: string
 }

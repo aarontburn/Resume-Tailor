@@ -1,5 +1,5 @@
 import { UUID } from "mongodb";
-import { Document } from "../editor/components/Document";
+import { Document } from "../editor/Document";
 
 export interface User {
     userID: UUID,

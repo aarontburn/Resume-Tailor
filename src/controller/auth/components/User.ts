@@ -1,5 +1,9 @@
+import { Document } from "../../editor/Document";
+import { UUID } from "../../types/DocTypes";
+
 export interface User {
-    id: string,
+    userID: UUID,
     username: string,
     email: string,
+    documents: Document[],
 }
