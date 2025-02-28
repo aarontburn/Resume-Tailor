@@ -1,42 +1,33 @@
 "use client";
 
 import { log } from "../../common/log";
-import { signInUser, registerUser, FirebaseAuthResponse } from "../../controller/auth/FirebaseGateway";
 import "./style.css";
 import { FormEvent, useEffect, useState } from "react";
-import { FirebaseError } from "firebase/app";
 import { getCookie, setCookie } from "../../common/cookie";
 import { USER_ID } from "../../common/keys";
 import { redirect } from "../../common/helper";
+import { registerUser, signInUser } from "../../controller/auth/AuthGateway";
+import { ResponseResult } from "../../common/Response";
+import { User } from "../../common/database/User";
 
 type ReactSetStateFunction<T = any> = (value: T | ((prevState: T) => T)) => void;
 
-function parseFirebaseError(error: string | FirebaseError): string {
-    if (typeof error === "string") {
-        return error;
-    }
-    const splitError: string = error.code.split("/")[1].split("-").join(" ").trim();
-
-    return splitError[0].toUpperCase() + splitError.slice(1);
-    // TODO: Have a better error message for each type of error
-
-}
 
 
 async function loginUser(email: string, password: string, setErrorMessage: ReactSetStateFunction<string>): Promise<void> {
-    const result: FirebaseAuthResponse = await signInUser(email, password);
+    const result: ResponseResult<User, string> = await signInUser(email, password);
     if (result.type === "success") {
         log("Signed in successfully");
         setErrorMessage("Signed in successfully.");
 
-        setCookie(USER_ID, result.body.user.uid);
+        await setCookie(USER_ID, result.body.userID);
 
         // Programmatically redirect back to home screen
         redirect("/");
 
 
     } else {
-        setErrorMessage("Error: " + parseFirebaseError(result.body as FirebaseError));
+        setErrorMessage("Error: " + result.body);
     }
 }
 
@@ -50,20 +41,21 @@ async function register(email: string, password1: string, password2: string, set
         return;
     }
 
-    const result: FirebaseAuthResponse = await registerUser(email, password1);
+    const result: ResponseResult<User, string> = await registerUser(email, password1);
     if (result.type === "success") {
         log("Registered successfully");
+        await setCookie(USER_ID, result.body.userID);
+
         // Redirect to home or profile maybe
         redirect("/")
     } else {
-        setErrorMessage("Error: " + parseFirebaseError(result.body as FirebaseError));
+        setErrorMessage("Error: " + result.body);
 
     }
 }
 
 const onFieldChange = (setState: ReactSetStateFunction, property: string = "value") =>
-    (inputEvent: FormEvent) =>
-        setState((inputEvent.target as any)[property])
+    (inputEvent: FormEvent) => setState((inputEvent.target as any)[property])
 
 
 export default function AuthPage() {

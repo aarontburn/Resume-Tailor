@@ -19,7 +19,7 @@ export async function getCookie(cookieName: string): Promise<string | undefined>
 
 export async function setCookie(key: string, value: string): Promise<void> {
     const cookieStore: ReadonlyRequestCookies = await cookies();
-    cookieStore.set(key, value);
+    await cookieStore.set(key, value);
     log(`Setting cookie '${key}' to '${value}'`);
     log(`All cookies: ${cookieStore.getAll().map(c => `${c.name}: ${c.value}`)}`);
 }

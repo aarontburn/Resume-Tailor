@@ -1,6 +1,10 @@
+"use server";
+
+
 import { log } from "../../common/log";
 import { getAuth, createUserWithEmailAndPassword, Auth, UserCredential, signInWithEmailAndPassword, AuthError } from "firebase/auth";
 import { FirebaseError, FirebaseOptions, initializeApp } from 'firebase/app';
+import { respondError, respondSuccess, ResponseResult } from "../../common/Response";
 
 // I think this is fine to leave here...
 const firebaseConfig: FirebaseOptions = {
@@ -13,14 +17,10 @@ const firebaseConfig: FirebaseOptions = {
     measurementId: "G-H2CV0CTK51"
 };
 
-export type FirebaseAuthResponse = 
-    { type: "success", body: UserCredential } |
-    { type: "failure", body: FirebaseError | string }
-
 
 
 let auth: Auth | undefined = undefined;
-export function init() {
+export async function initFirebase() {
     if (auth !== undefined) {
         log("Attempted to re-initialize auth.");
     }
@@ -30,9 +30,20 @@ export function init() {
 }
 
 
-export async function registerUser(email: string, password: string): Promise<FirebaseAuthResponse> {
+function parseFirebaseError(error: string | FirebaseError): string {
+    if (typeof error === "string") {
+        return error;
+    }
+    const splitError: string = error.code.split("/")[1].split("-").join(" ").trim();
+
+    return splitError[0].toUpperCase() + splitError.slice(1);
+    // TODO: Have a better error message for each type of error
+
+}
+
+export async function registerUserInFirebase(email: string, password: string): Promise<ResponseResult<UserCredential, string>> {
     if (auth === undefined) {
-        init();
+        initFirebase();
     }
 
     if (auth === undefined) {
@@ -43,28 +54,24 @@ export async function registerUser(email: string, password: string): Promise<Fir
 
     }
     return createUserWithEmailAndPassword(auth, email, password).then((user) => {
-        return { type: "success", body: user } as FirebaseAuthResponse
+        return respondSuccess(user)
     }).catch((err: AuthError) => {
-        return { type: "failure", body: err } as FirebaseAuthResponse
+        return respondError(parseFirebaseError(err)) 
     });
 }
 
-export async function signInUser(email: string, password: string): Promise<FirebaseAuthResponse> {
+export async function signInUserInFirebase(email: string, password: string): Promise<ResponseResult<UserCredential, string>> {
     if (auth === undefined) {
-        init();
+        initFirebase();
     }
 
     if (auth === undefined) {
-        return Promise.resolve({
-            type: "failure",
-            body: "Could not initialize Firebase",
-        });
-
+        return Promise.resolve(respondError("Could not initialize Firebase."));
     }
     return signInWithEmailAndPassword(auth, email, password).then((user) => {
-        return { type: "success", body: user } as FirebaseAuthResponse
-    }).catch((err: Error) => {
-        return { type: "failure", body: err } as FirebaseAuthResponse
+        return respondSuccess(user)
+    }).catch((err: AuthError) => {
+        return respondError(parseFirebaseError(err)) 
     });
 
 }
