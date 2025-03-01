@@ -5,8 +5,7 @@ import { UserCredential } from "firebase/auth";
 import { Collection, Db, MongoClient, WithId, Document, MongoServerError } from "mongodb";
 import { User } from "../../common/database/User";
 import { respondError, respondSuccess, ResponseResult } from "../../common/Response";
-import { schemaToUser, UserDocumentsSchema, UserSchema, userToSchema as userToSchema } from "../types/Schemas";
-import { log } from "../../common/log";
+import { schemaToUser, UserDocumentsSchema, UserSchema, userToSchema } from "../types/Schemas";
 
 
 const DB_URL: string = `mongodb+srv://aarontburnham:${process.env.MONGO_PASSWORD}@userdocuments.s0ljn.mongodb.net/?retryWrites=true&w=majority&appName=UserDocuments`;
@@ -57,7 +56,7 @@ export async function verifyUserIsInMongoDB(userCredentials: UserCredential): Pr
     try {
         await addUserToDatabaseIfNotExist(user);
 
-        const userSchema: WithId<UserSchema> | null = await collection.findOne({ user_id: user.userID });
+        const userSchema: WithId<UserSchema> | null = await collection.findOne(userQuery(user));
         if (userSchema === null) {
             return respondError("Error inserting user into database.");
         }
@@ -77,11 +76,15 @@ async function addUserToDatabaseIfNotExist(user: User) {
     const userCollection: Collection<UserSchema> = MongoGateway.getInstance().getUserCollection();
     const userDocumentCollection: Collection<UserDocumentsSchema> = MongoGateway.getInstance().getUserDocumentsCollection();
 
-    if (await userCollection.findOne({ user_id: user.userID }) === null) {
+    if (await userCollection.findOne(userQuery(user)) === null) {
         await userCollection.insertOne(userToSchema(user));
     }
-    if (await userDocumentCollection.find({ user_id: user.userID }) === null) {
+    if (await userDocumentCollection.find(userQuery(user)) === null) {
         await userDocumentCollection.insertOne({ user_id: user.userID, document_ids: [] });
     }
 
+}
+
+function userQuery(user: User): { user_id: string } {
+    return { user_id: user.userID };
 }

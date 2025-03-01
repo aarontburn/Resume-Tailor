@@ -5,13 +5,13 @@ import { getAllCookies } from "../common/cookie";
 
 
 export default function Home() {
-  useEffect(() => {
-    (async () => {
-      console.log((await getAllCookies()).map(c => `${c.name}: ${c.value} `))
-    })();
-  });
+    useEffect(() => {
+        (async () => {
+            console.log((await getAllCookies()).map(c => `${c.name}: ${c.value} `))
+        })();
+    });
 
-  return (
-    <p>Home</p>
-  );
+    return (
+        <p>Home</p>
+    );
 }

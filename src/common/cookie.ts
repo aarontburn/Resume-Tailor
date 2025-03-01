@@ -24,7 +24,13 @@ export async function setCookie(key: string, value: string): Promise<void> {
     log(`All cookies: ${cookieStore.getAll().map(c => `${c.name}: ${c.value}`)}`);
 }
 
-export async function getAllCookies(): Promise<RequestCookie[]> {
+export async function getAllCookies(): Promise<{ [cookieName: string]: string }> {
     const cookieStore: ReadonlyRequestCookies = await cookies();
-    return cookieStore.getAll();
+
+    const cookieMap: { [cookieName: string]: string } = {};
+    for (const cookie of cookieStore.getAll()) {
+        cookieMap[cookie.name] = cookie.value;
+    }
+
+    return cookieMap;
 }
