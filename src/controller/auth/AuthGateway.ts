@@ -4,7 +4,7 @@ import { UserCredential } from "firebase/auth";
 import { respondError, respondSuccess, ResponseResult } from "../../common/Response";
 import { User } from "../../common/database/User";
 import { registerUserInFirebase, signInUserInFirebase } from "./FirebaseGateway";
-import { verifyUserIsInMongoDB } from "./MongoGateway";
+import { verifyUserIsInMongoDB } from "./MongoAuthGateway";
 
 
 export async function registerUser(email: string, password: string): Promise<ResponseResult<User, string>> {

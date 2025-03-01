@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { getAllCookies } from "../common/cookie";
+import { getAllCookies } from "../common/cookies/cookie_handler";
 
 
 export default function Home() {
     useEffect(() => {
         (async () => {
-            console.log((await getAllCookies()).map(c => `${c.name}: ${c.value} `))
+            console.log(await getAllCookies())
         })();
     });
 

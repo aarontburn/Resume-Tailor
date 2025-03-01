@@ -3,8 +3,9 @@
 import Link from "next/link"
 import "./Header.css"
 import { useEffect, useState } from "react";
-import { getCookie } from "../common/cookie";
-import { USER_ID } from "../common/keys";
+import { getCookie } from "../common/cookies/cookie_handler";
+import { COOKIE_USER_ID } from "../common/cookies/cookie_keys";
+import { ResponseResult } from "../common/Response";
 
 const Space = ({ space = "auto" }: { space?: string | number }) =>
     <div style={{ marginRight: `${space}` }}></div>
@@ -13,11 +14,10 @@ export default function Header() {
     const [userID, setUserID] = useState('');
     useEffect(() => {
         (async () => {
-            const uid: string | undefined = await getCookie(USER_ID);
-            if (uid === undefined) {
-                return;
+            const response: ResponseResult<string, undefined> = await getCookie(COOKIE_USER_ID);
+            if (response.type === "success") {
+                setUserID(response.body);
             }
-            setUserID(uid as string);
         })();
     }, [userID]);
 

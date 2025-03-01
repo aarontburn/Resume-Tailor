@@ -3,12 +3,12 @@
 import { log } from "../../common/log";
 import "./style.css";
 import { FormEvent, useEffect, useState } from "react";
-import { getCookie, setCookie } from "../../common/cookie";
-import { USER_ID } from "../../common/keys";
+import { getCookie, setCookie } from "../../common/cookies/cookie_handler";
 import { redirect } from "../../common/helper";
 import { registerUser, signInUser } from "../../controller/auth/AuthGateway";
 import { ResponseResult } from "../../common/Response";
 import { User } from "../../common/database/User";
+import { COOKIE_USER_ID } from "../../common/cookies/cookie_keys";
 
 type ReactSetStateFunction<T = any> = (value: T | ((prevState: T) => T)) => void;
 
@@ -20,7 +20,7 @@ async function loginUser(email: string, password: string, setErrorMessage: React
         log("Signed in successfully");
         setErrorMessage("Signed in successfully.");
 
-        await setCookie(USER_ID, result.body.userID);
+        await setCookie(COOKIE_USER_ID, result.body.userID);
 
         // Programmatically redirect back to home screen
         redirect("/");
@@ -44,7 +44,7 @@ async function register(email: string, password1: string, password2: string, set
     const result: ResponseResult<User, string> = await registerUser(email, password1);
     if (result.type === "success") {
         log("Registered successfully");
-        await setCookie(USER_ID, result.body.userID);
+        await setCookie(COOKIE_USER_ID, result.body.userID);
 
         // Redirect to home or profile maybe
         redirect("/")
@@ -62,9 +62,8 @@ export default function AuthPage() {
     const [returningUser, setReturningUser] = useState(true);
 
     useEffect(() => {
-        getCookie(USER_ID).then((response: string | undefined) => {
-            console.log(response)
-            if (response !== undefined) { // userid already stored, redirect to profile page
+        getCookie(COOKIE_USER_ID).then((response: ResponseResult<string, undefined>) => {
+            if (response.type === "success") { // userid already stored, redirect to profile page
                 redirect("/profile");
             }
         })

@@ -3,18 +3,19 @@
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { cookies } from 'next/headers'
-import { log } from './log';
+import { log } from '../log';
+import { respondError, respondSuccess, ResponseResult } from '../Response';
 
 
-
-export async function getCookie(cookieName: string): Promise<string | undefined> {
+export async function getCookie(cookieName: string): Promise<ResponseResult<string, undefined>> {
     const cookieStore: ReadonlyRequestCookies = await cookies();
     const cookie: RequestCookie | undefined = cookieStore.get(cookieName);
 
     if (cookie === undefined) {
         log("WARN: Attempted to access undefined cookie: " + cookieName);
+        return respondError(undefined);
     }
-    return cookie?.value;
+    return respondSuccess(cookie.value);
 }
 
 export async function setCookie(key: string, value: string): Promise<void> {
