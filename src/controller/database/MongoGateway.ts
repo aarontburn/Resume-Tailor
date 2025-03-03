@@ -1,7 +1,7 @@
 
 import { Collection, Db, MongoClient } from "mongodb";
 import { DocumentSchema, UserDocumentsSchema, UserSchema } from "../types/Schemas";
-import { User } from "../../common/database/User";
+import { RTUser } from "../../common/database/RTUser";
 
 
 const DB_URL: string = `mongodb+srv://aarontburnham:${process.env.MONGO_PASSWORD}@userdocuments.s0ljn.mongodb.net/?retryWrites=true&w=majority&appName=UserDocuments`;
@@ -38,7 +38,7 @@ export class MongoGateway {
         return this.database.collection(COLLECTIONS.documentData);
     }
 
-    public static userQuery(user: User): { user_id: string; } {
+    public static userQuery(user: RTUser): { user_id: string; } {
         return { user_id: user.userID };
     }
     

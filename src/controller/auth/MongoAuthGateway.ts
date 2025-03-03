@@ -1,13 +1,13 @@
 import { UserCredential } from "firebase/auth";
 import { Collection, WithId, MongoServerError } from "mongodb";
-import { User } from "../../common/database/User";
+import { RTUser } from "../../common/database/RTUser";
 import { ResponseResult, respondError, respondSuccess } from "../../common/Response";
 import { MongoGateway } from "../database/MongoGateway";
 import { UserSchema, schemaToUser, UserDocumentsSchema, userToSchema } from "../types/Schemas";
 
 
-export async function verifyUserIsInMongoDB(userCredentials: UserCredential): Promise<ResponseResult<User, string>> {
-    const user: User = {
+export async function verifyUserIsInMongoDB(userCredentials: UserCredential): Promise<ResponseResult<RTUser, string>> {
+    const user: RTUser = {
         userID: userCredentials.user.uid,
         email: userCredentials.user.email ?? "NO_REGISTERED_EMAIL"
     };
@@ -31,7 +31,7 @@ export async function verifyUserIsInMongoDB(userCredentials: UserCredential): Pr
 }
 
 
-async function addUserToDatabaseIfNotExist(user: User) {
+async function addUserToDatabaseIfNotExist(user: RTUser) {
     const userCollection: Collection<UserSchema> = MongoGateway.getInstance().getUserCollection();
     const userDocumentCollection: Collection<UserDocumentsSchema> = MongoGateway.getInstance().getUserDocumentsCollection();
 

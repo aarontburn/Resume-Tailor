@@ -7,7 +7,7 @@ import { getCookie, setCookie } from "../../common/cookies/cookie_handler";
 import { redirect } from "../../common/helper";
 import { registerUser, signInUser } from "../../controller/auth/AuthGateway";
 import { ResponseResult } from "../../common/Response";
-import { User } from "../../common/database/User";
+import { RTUser } from "../../common/database/RTUser";
 import { COOKIE_USER_ID } from "../../common/cookies/cookie_keys";
 
 type ReactSetStateFunction<T = any> = (value: T | ((prevState: T) => T)) => void;
@@ -15,7 +15,7 @@ type ReactSetStateFunction<T = any> = (value: T | ((prevState: T) => T)) => void
 
 
 async function loginUser(email: string, password: string, setErrorMessage: ReactSetStateFunction<string>): Promise<void> {
-    const result: ResponseResult<User, string> = await signInUser(email, password);
+    const result: ResponseResult<RTUser, string> = await signInUser(email, password);
     if (result.type === "success") {
         log("Signed in successfully");
         setErrorMessage("Signed in successfully.");
@@ -41,7 +41,7 @@ async function register(email: string, password1: string, password2: string, set
         return;
     }
 
-    const result: ResponseResult<User, string> = await registerUser(email, password1);
+    const result: ResponseResult<RTUser, string> = await registerUser(email, password1);
     if (result.type === "success") {
         log("Registered successfully");
         await setCookie(COOKIE_USER_ID, result.body.userID);

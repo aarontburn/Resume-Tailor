@@ -1,6 +1,15 @@
 import { DocumentTypes as DocumentType } from "../../common/constants"
-import { User } from "../../common/database/User"
+import { RTDocument, RTDocumentComponent } from "../../common/database/RTDocument"
+import { RTUser } from "../../common/database/RTUser"
 
+type Mapping<Schema extends keyof Schema, Object extends keyof Object> = {
+    [key: Schema]: value 
+}
+
+
+const UserMapping: UserSchema = {
+    user_id: ,
+}
 export type UserSchema = {
     user_id: string,
     email: string
@@ -34,10 +43,19 @@ export type DocumentComponentSchema = {
 
 
 
-export function userToSchema(user: User): UserSchema {
+export function userToSchema(user: RTUser): UserSchema {
     return { user_id: user.userID, email: user.email };
 }
 
-export function schemaToUser(userSchema: UserSchema): User {
+export function schemaToUser(userSchema: UserSchema): RTUser {
     return { userID: userSchema.user_id, email: userSchema.email };
 }
+
+// export function schemaToDocument(document: DocumentSchema): RTDocument {
+//     const components: RTDocumentComponent[] = [];
+//     return 
+
+
+// } 
+
+

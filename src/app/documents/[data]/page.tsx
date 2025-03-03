@@ -15,21 +15,33 @@ interface PageProps {
 
 
 export default function Page(pageProps: PageProps) {
-
-    const [documentID, setDocumentID] = useState<string | undefined>(undefined);
+    const [documentIDFromURL, setDocumentIDFromURL] = useState<string | undefined>(undefined);
 
     (async () => {
         const documentID: string = (await pageProps.params).data;
-        setDocumentID(documentID);
+        setDocumentIDFromURL(documentID);
     })();
 
-
-    return <div className="container">
-        {documentID ?? "Failed to get documentID"}
+    const [documeb]
 
 
+    return <div className="outer-container">
+        <div className="inner-container">
+            <div id="component-container">
 
 
+                
+            </div>
+
+            <div id="editor-container">
+
+            </div>
+
+
+            <div id="preview-container">
+
+            </div>
+        </div>
     </div>
 
 }

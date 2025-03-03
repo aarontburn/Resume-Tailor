@@ -1,6 +1,6 @@
 import { UUID } from "../../controller/types/DocTypes";
 
-export interface User {
+export interface RTUser {
     userID: UUID,
     email: string,
 }

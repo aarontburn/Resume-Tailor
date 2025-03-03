@@ -71,7 +71,7 @@ export default function Documents() {
                 if (documentIDList) {
                     return documentIDList.length === 0
                         ? <p>No documents found. Create a new one?</p>
-                        : documentIDList.map((id: string, index: number) => <p key={index}>{id}</p>)
+                        : documentIDList.map((id: string, index: number) => <p onClick={() => redirect(`/documents/${id}`)} key={index}>{id}</p>)
                 }
                 if (documentIDList === undefined) {
                     return <p>Loading documents...</p>
