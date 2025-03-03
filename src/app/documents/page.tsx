@@ -9,11 +9,30 @@ import { useEffect, useState } from "react";
 import { getCookie } from "../../common/cookies/cookie_handler";
 import { COOKIE_USER_ID } from "../../common/cookies/cookie_keys";
 import { ResponseResult } from "../../common/Response";
-import { retrieveDocumentIDsFromUserID } from "../../controller/database/DatabaseGateway";
+import { createNewDocument, retrieveDocumentIDsFromUserID } from "../../controller/database/DatabaseGateway";
 import { DocumentTypes } from "../../common/constants";
+import { UUID } from "../../controller/types/DocTypes";
+import { log } from "../../common/log";
 
-function createNewDocument(documentType: DocumentTypes) {
-    redirect("/documents/new_" + documentType)
+function handleNewDocument(documentType: DocumentTypes) {
+    (async () => {
+        const userIDResponse: ResponseResult<string, undefined> = await getCookie(COOKIE_USER_ID);
+        if (userIDResponse.type === "success") {
+            const newDocumentIDResponse: ResponseResult<UUID, string> = await createNewDocument(userIDResponse.body, documentType);
+
+            if (newDocumentIDResponse.type === "success") {
+                redirect(`/documents/${newDocumentIDResponse.body}`);
+            } else {
+                log("Error creating new document:");
+                log(JSON.stringify(newDocumentIDResponse.body));
+            }
+        } else {
+            log(`ERROR: Attempted to create a new document without stored userID.`);
+        }
+    })();
+
+
+
 }
 
 export default function Documents() {
@@ -42,8 +61,8 @@ export default function Documents() {
 
     return <div className="container">
         <DropdownButton id="dropdown-basic-button" title="New Document">
-            <Dropdown.Item onClick={() => createNewDocument("html")}>HTML Document</Dropdown.Item>
-            <Dropdown.Item onClick={() => createNewDocument("latex")}>LaTeX Document</Dropdown.Item>
+            <Dropdown.Item onClick={() => handleNewDocument("html")}>HTML Document</Dropdown.Item>
+            <Dropdown.Item onClick={() => handleNewDocument("latex")}>LaTeX Document</Dropdown.Item>
         </DropdownButton>
 
         <br />

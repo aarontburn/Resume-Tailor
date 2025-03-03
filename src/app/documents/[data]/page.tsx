@@ -1,34 +1,35 @@
+"use client";
+
+import { useState } from "react";
 import { DocumentTypes } from "../../../common/constants";
+import { redirect } from "../../../common/helper";
+import { log } from "../../../common/log";
+import { ResponseResult } from "../../../common/Response";
+import { createNewDocument } from "../../../controller/database/DatabaseGateway";
+import { UUID } from "../../../controller/types/DocTypes";
+import "./style.css";
 
 interface PageProps {
     params: Promise<{ data: string }>;
 }
 
-function handleNewDocument(type: DocumentTypes) {
-    
-}
+
+export default function Page(pageProps: PageProps) {
+
+    const [documentID, setDocumentID] = useState<string | undefined>(undefined);
+
+    (async () => {
+        const documentID: string = (await pageProps.params).data;
+        setDocumentID(documentID);
+    })();
 
 
-export default async function Page(pageProps: PageProps ) {
-    const data: string = (await pageProps.params).data;
-    if (data.includes("new")) {
-        const type = data.split("_")[1];
-
-        if (type === "latex") {
-            handleNewDocument("latex");
-
-        } else if (type === "html") {
-            handleNewDocument("html");
-
-        } else {
-            // error
-        }
-    }
+    return <div className="container">
+        {documentID ?? "Failed to get documentID"}
 
 
 
-    return <>
-        page
-    </>
+
+    </div>
 
 }

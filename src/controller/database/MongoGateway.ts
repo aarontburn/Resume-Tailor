@@ -1,6 +1,6 @@
 
 import { Collection, Db, MongoClient } from "mongodb";
-import { UserDocumentsSchema, UserSchema } from "../types/Schemas";
+import { DocumentSchema, UserDocumentsSchema, UserSchema } from "../types/Schemas";
 import { User } from "../../common/database/User";
 
 
@@ -10,7 +10,7 @@ const COLLECTIONS = {
     userCollection: "users",
     userDocuments: "documentsByUser",
     documentData: "documentData"
-};
+} as const;
 
 export class MongoGateway {
     private static instance: MongoGateway | undefined = undefined;
@@ -34,7 +34,7 @@ export class MongoGateway {
         return this.database.collection<UserDocumentsSchema>(COLLECTIONS.userDocuments);
     }
 
-    getDocumentDataCollection(): Collection {
+    getDocumentDataCollection(): Collection<DocumentSchema> {
         return this.database.collection(COLLECTIONS.documentData);
     }
 
