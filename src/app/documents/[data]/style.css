@@ -5,7 +5,7 @@
 
 .inner-container {
     border: 1px solid black;
-    height: 100%;
+    height: calc(100% - 2em);
     display: flex;
 }
 
@@ -19,13 +19,25 @@
 #editor-container {
     border: 1px solid red;
     width: 40%;
-
-
+    padding: 1em
 }
+
+
 
 #preview-container {
     border: 1px solid green;
     width: 40%;
+}
 
 
+#editor {
+    height: 100%;
+    width: 100%;
+    resize: none;
+}
+
+#doc-name-input {
+
+    width: 100%;
+    font-size: 2em;
 }

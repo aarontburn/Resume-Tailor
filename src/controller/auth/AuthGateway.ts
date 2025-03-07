@@ -12,25 +12,25 @@ export async function registerUser(email: string, password: string): Promise<Res
     const firebaseResponse: ResponseResult<UserCredential, string> = await registerUserInFirebase(email, password);
     if (firebaseResponse.type === "success") {
         // Add entry to mongoDB
-        const mongoResponse: ResponseResult<RTUser, string> = await verifyUserIsInMongoDB(firebaseResponse.body);
+        const mongoResponse: ResponseResult<RTUser, string> = await verifyUserIsInMongoDB(firebaseResponse.data);
         if (mongoResponse.type === "success") {
-            return respondSuccess(mongoResponse.body);
+            return respondSuccess(mongoResponse.data);
         }
-        return respondError(JSON.stringify(mongoResponse.body));
+        return respondError(JSON.stringify(mongoResponse.data));
     }
-    return respondError(firebaseResponse.body);
+    return respondError(firebaseResponse.data);
 }
 
 export async function signInUser(email: string, password: string): Promise<ResponseResult<RTUser, string>> {
     const firebaseResponse: ResponseResult<UserCredential, string> = await signInUserInFirebase(email, password);
     if (firebaseResponse.type === "success") {
         // Add entry to mongoDB
-        const mongoResponse: ResponseResult<RTUser, string> = await verifyUserIsInMongoDB(firebaseResponse.body);
+        const mongoResponse: ResponseResult<RTUser, string> = await verifyUserIsInMongoDB(firebaseResponse.data);
         if (mongoResponse.type === "success") {
-            return respondSuccess(mongoResponse.body);
+            return respondSuccess(mongoResponse.data);
         }
-        return respondError(JSON.stringify(mongoResponse.body));
+        return respondError(JSON.stringify(mongoResponse.data));
     }
-    return respondError(firebaseResponse.body);
+    return respondError(firebaseResponse.data);
 }
 

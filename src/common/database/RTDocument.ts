@@ -1,4 +1,5 @@
-import { UUID } from "../../controller/types/DocTypes";
+import { UUID } from "../constants";
+import { DocumentTypes } from "../constants";
 
 export interface RTDocument {
     userID: UUID,
@@ -6,7 +7,7 @@ export interface RTDocument {
     documentID: UUID,
     documentDisplayName: string,
 
-    type: DocumentType,
+    type: DocumentTypes,
     components: RTDocumentComponent[];
 }
 

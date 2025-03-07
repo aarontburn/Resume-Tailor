@@ -1,4 +1,4 @@
-import { UUID } from "../../controller/types/DocTypes";
+import { UUID } from "../constants";
 
 export interface RTUser {
     userID: UUID,

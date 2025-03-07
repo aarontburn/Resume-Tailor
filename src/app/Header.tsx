@@ -16,7 +16,7 @@ export default function Header() {
         (async () => {
             const response: ResponseResult<string, undefined> = await getCookie(COOKIE_USER_ID);
             if (response.type === "success") {
-                setUserID(response.body);
+                setUserID(response.data);
             }
         })();
     }, [userID]);

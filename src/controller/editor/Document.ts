@@ -1,5 +1,5 @@
 import { DocumentTypes } from "../../common/constants";
-import { UUID } from "../types/DocTypes";
+import { UUID } from "@/common/constants";
 
 export interface DocumentMetadata {
     last_edited: string // date

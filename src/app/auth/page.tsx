@@ -20,14 +20,14 @@ async function loginUser(email: string, password: string, setErrorMessage: React
         log("Signed in successfully");
         setErrorMessage("Signed in successfully.");
 
-        await setCookie(COOKIE_USER_ID, result.body.userID);
+        await setCookie(COOKIE_USER_ID, result.data.userID);
 
         // Programmatically redirect back to home screen
         redirect("/");
 
 
     } else {
-        setErrorMessage("Error: " + result.body);
+        setErrorMessage("Error: " + result.data);
     }
 }
 
@@ -44,12 +44,12 @@ async function register(email: string, password1: string, password2: string, set
     const result: ResponseResult<RTUser, string> = await registerUser(email, password1);
     if (result.type === "success") {
         log("Registered successfully");
-        await setCookie(COOKIE_USER_ID, result.body.userID);
+        await setCookie(COOKIE_USER_ID, result.data.userID);
 
         // Redirect to home or profile maybe
         redirect("/")
     } else {
-        setErrorMessage("Error: " + result.body);
+        setErrorMessage("Error: " + result.data);
 
     }
 }
